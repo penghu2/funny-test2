@@ -1,0 +1,10 @@
+*.class
+target
+test-output
+.settings
+.project
+.classpath
+.DS_Store
+.idea/
+*.iml
+deploy/

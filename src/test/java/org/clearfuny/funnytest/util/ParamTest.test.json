@@ -1,0 +1,33 @@
+[
+  {
+    "id": "case-01",
+    "note": "正常查询，插入2条有效resource，查询结果OK",
+    "postSteps":[
+      {
+        "id": "case01-http-execute",
+        "type": "http",
+        "params": {
+          "method": "get",
+          "url":"http://172.31.202.11:8090/mihua-web/cinemaCompare/suppliersList.do"
+        },
+        "handle":[
+          {"type": "check", "value": "$Assert.assertEquals($res.code, 200)"},
+          {"type": "jsonCheck", "value": "$Assert.assertEquals(2, $content.result.size())"},
+          {"type": "jsonCheck", "value": "$Assert.assertEquals($content.rc, 0)"},
+          {"type": "jsonCheck", "value": "$Assert.assertEquals($content.desc, \"成功\")"},
+          {"type": "jsonCheck", "value": "$Assert.assertEquals($content.result[0].name, \"猫眼\")"},
+          {"type": "jsonCheck", "value": "$Assert.assertEquals($content.result[1].name, \"蜘蛛网\")"},
+          {"type":"register", "key": "t", "value":"$res.content"}
+        ]
+      },
+      {
+        "id":"dubug",
+        "type":"debug",
+        "params": {
+          "method": "print",
+          "value": "${t}"
+        }
+      }
+    ]
+  }
+]
