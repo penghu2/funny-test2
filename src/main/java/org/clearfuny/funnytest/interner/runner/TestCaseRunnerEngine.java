@@ -7,7 +7,6 @@ import org.clearfuny.funnytest.interner.model.CaseParser;
 import org.clearfuny.funnytest.interner.model.Constant;
 import org.clearfuny.funnytest.interner.model.TestCase;
 import org.clearfuny.funnytest.interner.model.TestStep;
-import org.iflytek.city.interner.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;

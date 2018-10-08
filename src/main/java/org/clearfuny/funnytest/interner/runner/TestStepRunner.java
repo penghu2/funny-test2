@@ -72,18 +72,6 @@ public abstract class TestStepRunner extends TestStep {
         if (mainContext.size()<=1) return;
 
         replaceParams(mainContext);
-
-//        JSONObject param = this.getParams();
-//        String param_str = param.toJSONString();
-//
-//        /* velocity变量替换 */
-//        VelocityContext context = new VelocityContext(mainContext);
-//        String param_str_new = VelocityUtil.parse(context, param_str);
-//
-//        /* 重新设置变量 */
-//
-//        JSONObject object = JSONObject.parseObject(param_str_new);;
-//        this.setParams(object);
     }
 
     /**

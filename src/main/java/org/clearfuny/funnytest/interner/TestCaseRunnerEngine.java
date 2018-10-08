@@ -5,7 +5,6 @@ import com.alibaba.fastjson.JSONObject;
 import org.clearfuny.funnytest.exception.RunFailException;
 import org.clearfuny.funnytest.interner.model.*;
 import org.clearfuny.funnytest.interner.step.HttpTestStep;
-import org.iflytek.city.interner.model.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
