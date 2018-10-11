@@ -69,6 +69,18 @@
     <logger name="c.m.c.c" level="ERROR" />
 
 
+    <!-- 控制台输出 -->
+    <appender name="TEST-STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder" charset="UTF-8">
+            <pattern>%msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="test-logger" level="INFO" additivity="false">
+        <appender-ref ref="TEST-STDOUT" />
+    </logger>
+
+
     <!-- 日志输出级别 -->
     <root level="INFO">
         <appender-ref ref="STDOUT" />
