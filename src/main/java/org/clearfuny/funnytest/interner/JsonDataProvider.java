@@ -5,6 +5,7 @@ import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import org.clearfuny.funnytest.interner.model.Constant;
 import org.clearfuny.funnytest.util.FileUtils;
+import org.clearfuny.funnytest.util.LogUtil;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -20,6 +21,8 @@ public class JsonDataProvider implements IDataProvider, Iterator<Object[]>{
 
     private Object instance;
 
+    private String methodName;
+
     public static JsonDataProvider getInstance(){
         return new JsonDataProvider();
     }
@@ -31,6 +34,7 @@ public class JsonDataProvider implements IDataProvider, Iterator<Object[]>{
             String configPath = this.getConfigFilePath(m, cls);
             elements = JSON.parseArray(FileUtils.readFile(configPath));
             this.instance = instance;
+            this.methodName = m.getName();
             return this;
         } catch (IOException e) {
             e.printStackTrace();
@@ -41,6 +45,7 @@ public class JsonDataProvider implements IDataProvider, Iterator<Object[]>{
 
     protected String getConfigFilePath(Method m, Class<? extends TestEngine> cls) throws UnsupportedEncodingException {
         String filename = cls.getSimpleName() + "." + m.getName() + ".json";
+        LogUtil.info(String.format("start parse config file [%s]", filename));
         String path = cls.getResource("").getPath();
         path = java.net.URLDecoder.decode(path,"utf-8");
         return path+filename;
@@ -65,6 +70,7 @@ public class JsonDataProvider implements IDataProvider, Iterator<Object[]>{
         res[0] = obj.getString("id");
         res[1] = obj;
         obj.put(Constant.THIS, this.instance);
+        obj.put(Constant.THIS_METHOD, this.methodName);
         return res;
     }
 }

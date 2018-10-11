@@ -7,6 +7,7 @@ import org.clearfuny.funnytest.interner.model.CaseParser;
 import org.clearfuny.funnytest.interner.model.Constant;
 import org.clearfuny.funnytest.interner.model.TestCase;
 import org.clearfuny.funnytest.interner.model.TestStep;
+import org.clearfuny.funnytest.util.LogUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.CollectionUtils;
@@ -19,7 +20,9 @@ public class TestCaseRunnerEngine implements CaseRun, CaseParser {
 
     private Object testInstance;
 
-    private StepBuilder stepBuilder = new CommonStepBuilder();
+    private String method;
+
+    private StepBuilder stepBuilder = CommonStepBuilder.getInstance();
 
     @Override
     public TestCase parse(JSONObject caseInfo) {
@@ -61,7 +64,9 @@ public class TestCaseRunnerEngine implements CaseRun, CaseParser {
 
     @Override
     public void run(TestCase testCase) throws RunFailException {
-        log.info("==========================begain[%s]==========================", testCase.getId());
+        LogUtil.info(String.format("[begain]  %s.%s.%s ",
+                testInstance.getClass().getSimpleName(), method,testCase.getId()));
+
         List<TestStep> preSteps = testCase.getPreSteps();
         List<TestStep> postSteps = testCase.getPostSteps();
         try {
@@ -80,8 +85,10 @@ public class TestCaseRunnerEngine implements CaseRun, CaseParser {
             //上下文重置为空，释放对象
             mainContext = null;
 
+            LogUtil.info("[success]\n");
+
         } catch (RunFailException e) {
-            log.info("======================Failed[%s][%s]======================", testCase.getId(), e.getMessage());
+            LogUtil.error(String.format("[fail] error=[%s]", e.getMessage()));
             throw e;
         }
 
@@ -98,17 +105,23 @@ public class TestCaseRunnerEngine implements CaseRun, CaseParser {
     private void runSteps(List<TestStep> steps, JSONObject mainContext) throws RunFailException {
         if (!CollectionUtils.isEmpty(steps)) {
             for (TestStep item : steps) {
+                LogUtil.info("\n  step [%s]", item.getId());
                 item.run(mainContext);
             }
         }
     }
 
-    public static void run(JSONObject caseInfo) throws RunFailException {
+    public static void run(JSONObject context) throws RunFailException {
         TestCaseRunnerEngine engine = new TestCaseRunnerEngine();
+
         //从JSON中解析出TestCase对象
-        TestCase testCase = engine.parse(caseInfo);
+        LogUtil.info("building test case...");
+        TestCase testCase = engine.parse(context);
+
         //设置case实例
-        engine.setTestInstance(caseInfo.get(Constant.THIS));
+        engine.setTestInstance(context.get(Constant.THIS));
+        engine.setMethod((String) context.get(Constant.THIS_METHOD));
+
         //引擎调度
         engine.run(testCase);
     }
@@ -119,5 +132,13 @@ public class TestCaseRunnerEngine implements CaseRun, CaseParser {
 
     public void setTestInstance(Object testInstance) {
         this.testInstance = testInstance;
+    }
+
+    public void setMethod(String method) {
+        this.method = method;
+    }
+
+    public String getMethod() {
+        return method;
     }
 }

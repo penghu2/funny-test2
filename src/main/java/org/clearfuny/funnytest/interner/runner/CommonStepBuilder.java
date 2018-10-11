@@ -9,6 +9,15 @@ import org.clearfuny.funnytest.interner.step.HttpTestStep;
 
 public class CommonStepBuilder implements StepBuilder{
 
+    private static CommonStepBuilder instance;
+
+    public static CommonStepBuilder getInstance() {
+        if (instance == null) {
+            instance = new CommonStepBuilder();
+        }
+        return instance;
+    }
+
     public TestStep build(JSONObject object) {
         String type = object.getString("type");
         StepType stepType = StepType.getByValue(type);

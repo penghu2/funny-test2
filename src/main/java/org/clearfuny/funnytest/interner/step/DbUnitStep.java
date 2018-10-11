@@ -5,6 +5,7 @@ import org.clearfuny.funnytest.exception.RunFailException;
 import org.clearfuny.funnytest.interner.TestEngine;
 import org.clearfuny.funnytest.interner.model.Constant;
 import org.clearfuny.funnytest.util.DBUtil;
+import org.clearfuny.funnytest.util.LogUtil;
 import org.dbunit.DatabaseUnitException;
 import org.clearfuny.funnytest.interner.runner.TestStepRunner;
 
@@ -70,17 +71,20 @@ public class DbUnitStep extends TestStepRunner {
 
     private void execSql(DBUtil dbUtil) throws SQLException {
         String sql = this.getParams().getString("sql");
+        LogUtil.info("  dbunit exec sql: %s", sql);
         dbUtil.execSql(sql);
     }
 
     private void insertByXml(DBUtil dbUtil, Object instance) throws DatabaseUnitException, SQLException, MalformedURLException {
         String xml = this.getParams().getString("xml");
+        LogUtil.info("  dbunit insert: %s", xml);
         String path = instance.getClass().getResource(xml).getPath();
         dbUtil.insertByXml(path);
     }
 
     private void deleteByXml(DBUtil dbUtil, Object instance) throws DatabaseUnitException, SQLException, MalformedURLException {
         String xml = this.getParams().getString("xml");
+        LogUtil.info("  dbunit delete: %s", xml);
         String path = instance.getClass().getResource(xml).getPath();
         dbUtil.deleteByXml(path);
     }
