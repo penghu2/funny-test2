@@ -12,7 +12,7 @@ import org.springframework.context.annotation.Configuration;
  **/
 @Configuration
 @EnableAutoConfiguration
-@ComponentScan(basePackages={"org.iflytek.city"})
+@ComponentScan(basePackages={"org.clearfuny.funnytest"})
 public class App implements CommandLineRunner
 {
     public static void main( String[] args )
